@@ -84,15 +84,18 @@ router.post('/api/score', wrap(async function(req, res){
 		return res.status(400).json({ error: 'Run finished too fast' });
 	}
 
-	await db.query('INSERT INTO scores (name, bird, score, created_at) VALUES (?, ?, ?, ?)',
+	const [inserted] = await db.query('INSERT INTO scores (name, bird, score, created_at) VALUES (?, ?, ?, ?)',
 		[session.name, session.bird, result.score, Date.now()]);
-	const [[{ better }]] = await db.query('SELECT COUNT(*) AS better FROM scores WHERE score > ?', [result.score]);
-	res.json({ score: result.score, rank: better + 1 });
+	// same order as the leaderboard: higher score first, ties go to whoever got it first
+	const [[{ ahead }]] = await db.query(
+		'SELECT COUNT(*) AS ahead FROM scores WHERE score > ? OR (score = ? AND id < ?)',
+		[result.score, result.score, inserted.insertId]);
+	res.json({ score: result.score, rank: ahead + 1 });
 }));
 
 router.get('/api/leaderboard', wrap(async function(req, res){
 	const [rows] = await db.query(
-		'SELECT name, bird AS `character`, score FROM scores ORDER BY score DESC, created_at ASC LIMIT 5');
+		'SELECT name, bird AS `character`, score FROM scores ORDER BY score DESC, id ASC LIMIT 5');
 	res.json(rows);
 }));
 

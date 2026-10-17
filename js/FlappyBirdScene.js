@@ -37,6 +37,7 @@ class FlappyBirdScene extends Phaser.Scene {
 
 	create(){
 		let game = this;
+		this.cameras.main.setZoom(3).centerOn(144, 256);
 
 		// background
 		// scale to the screen height (sides get cropped) and lift the art so its own

@@ -232,7 +232,8 @@ class FlappyBirdScene extends Phaser.Scene {
 		this.backgroundDay.visible = true;
 		this.backgroundNight.visible = false;
 		this.currentPipe = assets.obstacle.pipe.orange;
-		this.flappyBird = new FlappyBird(this, BIRD_X, BIRD_START_Y, character);
+		// wait centered under the start image; startGame() slides it to BIRD_X
+		this.flappyBird = new FlappyBird(this, assets.scene.width, BIRD_START_Y, character);
 		this.ground.anims.play( assets.animation.ground.moving, true );
 	}
 
@@ -311,6 +312,8 @@ class FlappyBirdScene extends Phaser.Scene {
 		this.scoreTxt.alpha = 1;
 		this.hasGameStarted = true;
 		this.start.visible = false;
+		// cosmetic only: the simulation already treats the bird as being at BIRD_X
+		this.tweens.add({ targets: this.flappyBird, x: BIRD_X, duration: 150 });
 	}
 
 	// create, move and remove pipe images to match the simulation

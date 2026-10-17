@@ -12,7 +12,7 @@ const PIPE_VX = -100;
 const PIPE_INTERVAL = 130; // ticks between pipes
 
 export const BIRD_X = 60;
-export const BIRD_START_Y = 265;
+export const BIRD_START_Y = 310; // just below the start image
 const BIRD_HALF_W = 17; // sprite is 34x24
 const BIRD_HALF_H = 12;
 

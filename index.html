@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<title>RE: flappy</title>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" type="image/png" href="assets/favicon.png" />
+        <link rel="stylesheet" type="text/css" href="game.css">
+        <script type="text/javascript" src="phaser.min.js"></script>
+        <script type="module" src = "game.js"></script>
+    </head>
+	<body>
+		<div style="font-family:font1; position:absolute; left:-1000px; visibility:hidden;">.</div>
+
+		<div id="menu" hidden>
+			<h1>RE: flappy</h1>
+			<input id="player-name" maxlength="12" placeholder="Your name" autocomplete="off">
+			<div id="characters">
+				<button type="button" data-character="char-1"><img src="assets/characters/char-1.png" alt="Character 1"></button>
+				<button type="button" data-character="char-2"><img src="assets/characters/char-2.png" alt="Character 2"></button>
+				<button type="button" data-character="char-3"><img src="assets/characters/char-3.png" alt="Character 3"></button>
+				<button type="button" data-character="char-4"><img src="assets/characters/char-4.png" alt="Character 4"></button>
+				<button type="button" data-character="char-5"><img src="assets/characters/char-5.png" alt="Character 5"></button>
+				<button type="button" data-character="char-6"><img src="assets/characters/char-6.png" alt="Character 6"></button>
+				<button type="button" data-character="char-7"><img src="assets/characters/char-7.png" alt="Character 7"></button>
+				<button type="button" data-character="char-8"><img src="assets/characters/char-8.png" alt="Character 8"></button>
+			</div>
+			<button type="button" id="play">Play</button>
+			<p id="menu-error"></p>
+			<h2>Leaderboard</h2>
+			<ol id="leaderboard"></ol>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,124 @@
+@font-face {
+    font-family: 'font1';
+    src: url('assets/myfont.woff') format('woff'),
+        url('assets/myfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body{
+    background: #fff;
+    padding: 0px;
+    margin: 0px;
+}
+
+canvas{
+    display:block;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#menu{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(85vw, 260px);
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 16px;
+    background: #ded895;
+    border: 3px solid #543847;
+    border-radius: 8px;
+    font-family: font1, sans-serif;
+    color: #543847;
+    text-align: center;
+    z-index: 10;
+}
+
+#menu[hidden]{ display: none; }
+
+#menu input, #menu button{
+    font-family: inherit;
+    font-size: 16px;
+    border: 2px solid #543847;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#player-name{
+    width: 100%;
+    padding: 6px 8px;
+    text-align: center;
+}
+
+#characters{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin: 12px 0;
+}
+
+#characters button{
+    display: flex;
+    justify-content: center;
+    padding: 4px;
+    background: #fff8d0;
+    cursor: pointer;
+}
+
+#characters button.selected{
+    background: #f7b731;
+    outline: 2px solid #543847;
+}
+
+#characters img{
+    display: block;
+    width: 40px;
+    height: 40px;
+    image-rendering: pixelated;
+}
+
+#play{
+    width: 100%;
+    padding: 8px;
+    background: #e86101;
+    color: #fff;
+    cursor: pointer;
+}
+
+#play:disabled{ opacity: 0.6; cursor: default; }
+
+#menu-error{
+    min-height: 1em;
+    margin: 6px 0;
+    color: #c0392b;
+    font-size: 13px;
+}
+
+#menu h1{
+    margin: 0 0 12px;
+    font-size: 26px;
+    color: #e86101;
+    text-shadow: 2px 2px 0 #543847;
+}
+
+#menu h2{
+    margin: 4px 0;
+    font-size: 18px;
+}
+
+#leaderboard{
+    margin: 0;
+    padding-left: 28px;
+    text-align: left;
+    font-size: 14px;
+}
+
+#leaderboard .score{
+    float: right;
+}

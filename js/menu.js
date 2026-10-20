@@ -51,6 +51,7 @@ playButton.addEventListener('click', async () => {
 		return;
 	}
 	errorText.textContent = '';
+	nameInput.blur(); // close the mobile keyboard before the game starts
 	playButton.disabled = true;
 	try {
 		const res = await fetch('/api/session', {

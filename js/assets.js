@@ -24,12 +24,6 @@ const assets = {
         width: 25,
         base: 'number',
         score: 'score'
-    },
-    animation: {
-        ground: {
-            moving: 'moving-ground',
-            stop: 'stop-ground'
-        }
     }
 }
 

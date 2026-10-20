@@ -15,10 +15,7 @@ class FlappyBirdScene extends Phaser.Scene {
 		// same art for day and night
 		this.load.image(assets.scene.background.day, 'assets/background-castle.jpg');
 		this.load.image(assets.scene.background.night, 'assets/background-castle.jpg');
-		this.load.spritesheet(assets.scene.ground, 'assets/ground-sprite.png', {
-			frameWidth: 336,
-			frameHeight: 112
-		});
+		this.load.image(assets.scene.ground, 'assets/ground-sprite.png');
 
 		this.load.image(assets.scene.startGame, 'assets/startgame.png');
 		this.load.image(assets.scene.gameOver, 'assets/gameover.png');
@@ -54,33 +51,20 @@ class FlappyBirdScene extends Phaser.Scene {
 
 		this.pipeSprites = new Map(); // sim pipe id -> { top, bottom } images
 
-		// ground 
-		this.ground = this.add.sprite(assets.scene.width, 468, assets.scene.ground);
-		this.ground.setDepth(20);
-
-		this.anims.create({ key: assets.animation.ground.moving, 
-			frames: this.anims.generateFrameNumbers(assets.scene.ground, {
-				start: 0,
-				end: 2
-			}),
-			frameRate: 15,
-			repeat: -1
-		});
-
-		this.anims.create({ key: assets.animation.ground.moving, 
-			frames:[{
-				key: assets.scene.ground,
-				frame: 0
-			}],
-			frameRate: 20
-		});
+		// ground: one long strip drawn twice side by side; update() slides both
+		// left and wraps. (A TileSprite would resample the art and blur it.)
+		this.groundStrips = [0, 1].map(() =>
+			this.add.image(0, 412, assets.scene.ground).setOrigin(0, 0).setDepth(20));
+		this.groundOffset = 0;
+		this.groundMoving = false;
 		
 		// start, over, repeat
 		this.start = this.add.image(assets.scene.width, 156, assets.scene.startGame);
 		this.start.setDepth(30);
 		this.start.visible = false;
 
-		this.gameOver = this.add.image(assets.scene.width, 100, assets.scene.gameOver);
+		// 86px tall art; sits high enough to leave room for the player name at y=134
+		this.gameOver = this.add.image(assets.scene.width, 88, assets.scene.gameOver);
 		this.gameOver.setDepth(20);
 		this.gameOver.visible = false;
 
@@ -177,11 +161,18 @@ class FlappyBirdScene extends Phaser.Scene {
 	showMenu(){
 		this.start.visible = false;
 		this.scoreboard.visible = false;
-		this.ground.anims.play( assets.animation.ground.moving, true );
+		this.groundMoving = true;
 		openMenu().then(({ name, character, session }) => this.initGame(name, character, session));
 	}
 
 	update(time, delta){
+		// same speed as the pipes (100px/s in sim.js)
+		if (this.groundMoving){
+			const stripWidth = this.groundStrips[0].width;
+			this.groundOffset = (this.groundOffset + 100 * delta / 1000) % stripWidth;
+			this.groundStrips.forEach((strip, i) => { strip.x = i * stripWidth - this.groundOffset; });
+		}
+
 		if (this.isGameOver){
 			// cosmetic: let the dead bird drop to the ground
 			if (this.flappyBird.y < GROUND_Y - 12){
@@ -235,7 +226,7 @@ class FlappyBirdScene extends Phaser.Scene {
 		this.currentPipe = assets.obstacle.pipe.orange;
 		// wait centered under the start image; startGame() slides it to BIRD_X
 		this.flappyBird = new FlappyBird(this, assets.scene.width, BIRD_START_Y, character);
-		this.ground.anims.play( assets.animation.ground.moving, true );
+		this.groundMoving = true;
 	}
 
 	flapBird(){
@@ -265,7 +256,7 @@ class FlappyBirdScene extends Phaser.Scene {
 		this.scoreboard.visible = true;
 		this.hasGameStarted = false;
 		this.flappyBird.die();
-		this.ground.anims.stop(assets.animation.ground.moving, true);
+		this.groundMoving = false;
 		this.gameOver.visible = true;
 		this.playerName.visible = true;
 		this.restart.visible = true;

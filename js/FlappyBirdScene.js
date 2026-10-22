@@ -13,8 +13,8 @@ class FlappyBirdScene extends Phaser.Scene {
 
 		// scene assets
 		// same art for day and night
-		this.load.image(assets.scene.background.day, 'assets/background-castle.jpg');
-		this.load.image(assets.scene.background.night, 'assets/background-castle.jpg');
+		this.load.image(assets.scene.background.day, 'assets/background-day.png');
+		this.load.image(assets.scene.background.night, 'assets/background-day.png');
 		this.load.image(assets.scene.ground, 'assets/ground-sprite.png');
 
 		this.load.image(assets.scene.startGame, 'assets/startgame.png');
@@ -37,16 +37,10 @@ class FlappyBirdScene extends Phaser.Scene {
 		this.cameras.main.setZoom(3).centerOn(144, 256);
 
 		// background
-		// scale to the screen height (sides get cropped) and lift the art so its own
-		// horizon (row 703 of 800) sits on top of the ground strip at y=412
-		const fitBackground = image => {
-			image.setScale(512 / image.height);
-			image.y = 412 - (703 - image.height / 2) * image.scaleY;
-		};
-		this.backgroundDay = this.add.image(assets.scene.width, 256, assets.scene.background.day).setInteractive();
-		fitBackground(this.backgroundDay);
-		this.backgroundNight = this.add.image(assets.scene.width, 256, assets.scene.background.night).setInteractive();
-		fitBackground(this.backgroundNight);
+		// 288x512 art; its bottom edge sits on top of the ground strip at y=412,
+		// so the houses stand on the ground and only plain sky goes off the top
+		this.backgroundDay = this.add.image(assets.scene.width, 412, assets.scene.background.day).setOrigin(0.5, 1).setInteractive();
+		this.backgroundNight = this.add.image(assets.scene.width, 412, assets.scene.background.night).setOrigin(0.5, 1).setInteractive();
 		this.backgroundNight.visible = false;
 
 		this.pipeSprites = new Map(); // sim pipe id -> { top, bottom } images

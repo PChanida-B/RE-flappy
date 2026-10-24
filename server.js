@@ -94,8 +94,10 @@ router.post('/api/score', wrap(async function(req, res){
 }));
 
 router.get('/api/leaderboard', wrap(async function(req, res){
+	// ?limit=N for the full ranking view; defaults to the menu's top 5, capped at 300
+	const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 5, 1), 300);
 	const [rows] = await db.query(
-		'SELECT name, bird AS `character`, score FROM scores ORDER BY score DESC, id ASC LIMIT 5');
+		'SELECT name, bird AS `character`, score FROM scores ORDER BY score DESC, id ASC LIMIT ?', [limit]);
 	res.json(rows);
 }));
 

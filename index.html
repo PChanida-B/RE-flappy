@@ -13,6 +13,7 @@
 
 		<div id="menu" hidden>
 			<h1>RE: flappy</h1>
+			<div id="menu-main">
 			<input id="player-name" maxlength="12" placeholder="Your name" autocomplete="off">
 			<div id="characters">
 				<button type="button" data-character="char-1"><img src="assets/characters/char-1.png" alt="Character 1"></button>
@@ -25,9 +26,16 @@
 				<button type="button" data-character="char-8"><img src="assets/characters/char-8.png" alt="Character 8"></button>
 			</div>
 			<button type="button" id="play">Play</button>
+			<button type="button" id="show-ranking">Top 300</button>
 			<p id="menu-error"></p>
 			<h2>Leaderboard</h2>
 			<ol id="leaderboard"></ol>
+			</div>
+			<div id="menu-ranking" hidden>
+				<h2>Top 300</h2>
+				<ol id="ranking-list"></ol>
+				<button type="button" id="hide-ranking">Back</button>
+			</div>
 		</div>
 	</body>
 </html>

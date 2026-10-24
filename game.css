@@ -93,6 +93,23 @@ canvas{
 
 #play:disabled{ opacity: 0.6; cursor: default; }
 
+#show-ranking, #hide-ranking{
+    width: 100%;
+    margin-top: 6px;
+    padding: 6px;
+    background: #fff8d0;
+    color: #543847;
+    cursor: pointer;
+}
+
+#menu-main[hidden], #menu-ranking[hidden]{ display: none; }
+
+#menu #ranking-list{
+    max-height: 55vh;
+    overflow-y: auto;
+    padding-left: 40px; /* room for three-digit ranks */
+}
+
 #menu-error{
     min-height: 1em;
     margin: 6px 0;
@@ -112,13 +129,13 @@ canvas{
     font-size: 18px;
 }
 
-#leaderboard{
+#leaderboard, #ranking-list{
     margin: 0;
     padding-left: 28px;
     text-align: left;
     font-size: 14px;
 }
 
-#leaderboard .score{
+#leaderboard .score, #ranking-list .score{
     float: right;
 }

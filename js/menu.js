@@ -4,6 +4,9 @@ const nameInput = document.getElementById('player-name');
 const playButton = document.getElementById('play');
 const errorText = document.getElementById('menu-error');
 const leaderboard = document.getElementById('leaderboard');
+const mainView = document.getElementById('menu-main');
+const rankingView = document.getElementById('menu-ranking');
+const rankingList = document.getElementById('ranking-list');
 const characterButtons = document.querySelectorAll('#characters button');
 
 let character = characterButtons[0].dataset.character;
@@ -24,10 +27,11 @@ function selectCharacter(key){
 characterButtons.forEach(b => b.addEventListener('click', () => selectCharacter(b.dataset.character)));
 selectCharacter(character);
 
-async function loadLeaderboard(){
-	leaderboard.textContent = '';
+// Fill an <ol> with the top `limit` scores.
+async function loadLeaderboard(list, limit){
+	list.textContent = '';
 	try {
-		const res = await fetch('/api/leaderboard');
+		const res = await fetch(`/api/leaderboard?limit=${limit}`);
 		const rows = await res.json();
 		if (!res.ok) throw new Error(rows.error);
 		for (const row of rows){
@@ -36,13 +40,22 @@ async function loadLeaderboard(){
 			score.className = 'score';
 			score.textContent = row.score;
 			li.append(score, row.name); // textContent only, names can't inject HTML
-			leaderboard.append(li);
+			list.append(li);
 		}
-		if (rows.length === 0) leaderboard.textContent = 'No scores yet';
+		if (rows.length === 0) list.textContent = 'No scores yet';
 	} catch (e) {
-		leaderboard.textContent = 'Leaderboard unavailable';
+		list.textContent = 'Leaderboard unavailable';
 	}
 }
+
+function showRanking(show){
+	mainView.hidden = show;
+	rankingView.hidden = !show;
+	if (show) loadLeaderboard(rankingList, 300);
+}
+
+document.getElementById('show-ranking').addEventListener('click', () => showRanking(true));
+document.getElementById('hide-ranking').addEventListener('click', () => showRanking(false));
 
 playButton.addEventListener('click', async () => {
 	const name = nameInput.value.trim();
@@ -77,7 +90,8 @@ playButton.addEventListener('click', async () => {
 // Show the menu; resolves with { name, character, session } when the player hits Play.
 export function openMenu(){
 	menu.hidden = false;
-	loadLeaderboard();
+	showRanking(false);
+	loadLeaderboard(leaderboard, 5);
 	return new Promise(resolve => { onPlay = resolve; });
 }
 
